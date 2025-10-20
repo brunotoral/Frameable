@@ -1,0 +1,66 @@
+x-app: &app
+  build:
+    context: .
+    dockerfile: ./.dockerdev/Dockerfile
+    args:
+      RUBY_VERSION: '3.3.2'
+      BUNDLER_VERSION: '2.7.2'
+      PG_MAJOR: '16'
+  environment: &env
+    RAILS_ENV: ${RAILS_ENV:-development}
+  image: frameable-dev:0.1.0
+  tmpfs:
+    - /tmp
+
+x-backend: &backend
+  <<: *app
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/app:cached
+    - rails_cache:/app/tmp/cache
+    - bundle:/usr/local/bundle
+    - .dockerdev/.psqlrc:/root/.psqlrc:ro
+    - .dockerdev/.bashrc:/root/.bashrc:ro
+  environment:
+    <<: *env
+    DATABASE_URL: postgres://postgres:postgres@postgres:5432
+    EDITOR: vi
+    HISTFILE: /app/log/.bash_history
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  runner:
+    <<: *backend
+    command: /bin/bash
+    ports:
+      - '3000:3000'
+
+  rails:
+    <<: *backend
+    command: bundle exec rails server -b 0.0.0.0
+    ports:
+      - '3000:3000'
+
+  postgres:
+    image: postgres:16
+    volumes:
+      - .dockerdev/.psqlrc:/root/.psqlrc:ro
+      - postgres:/var/lib/postgresql/data
+      - ./log:/root/log:cached
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PSQL_HISTFILE: /root/log/.psql_history
+    ports:
+      - 5432
+    healthcheck:
+      test: pg_isready -U postgres -h 127.0.0.1
+      interval: 5s
+
+volumes:
+  postgres:
+  bundle:
+  rails_cache:
+

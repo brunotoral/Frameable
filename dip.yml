@@ -1,0 +1,60 @@
+version: '6.1'
+
+interaction:
+  bash:
+    description: Open a bash shell within a Rails container
+    service: runner
+    command: /bin/bash
+
+  bundle:
+    description: Run Bundler commands
+    service: rails
+    command: bundle
+    compose_run_options: [no-deps]
+
+  rake:
+    description: Run Rake tasks
+    service: rails
+    command: bundle exec rails
+
+  rails:
+    description: Run Rails commands
+    service: rails
+    command: bundle exec rails
+    subcommands:
+      s:
+        description: Run Rails server available at http://localhost:3030
+        service: rails
+        compose:
+          run_options: [service-ports, use-aliases]
+
+  rspec:
+    description: Run unit tests
+    service: runner
+    environment:
+      RAILS_ENV: test
+    command: bundle exec rspec
+
+  rubocop:
+    description: Lint files with Rubocop
+    service: runner
+    command: bundle exec rubocop
+
+  guard:
+    description: Watch files with Guard
+    service: rails
+    environment:
+      RAILS_ENV: test
+    command: bundle exec guard
+
+  psql:
+    description: Run psql console
+    service: postgres
+    command: psql -h postgres -U postgres
+
+provision:
+  - dip compose down --volumes
+  - dip compose up -d postgres
+  - dip bundle install
+  - dip rails db:setup
+
