@@ -9,4 +9,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  #
+  resources :frames do
+    resources :circles, module: :frames, only: :create
+  end
+  resources :circles, except: :create
 end

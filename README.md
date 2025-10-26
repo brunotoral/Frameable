@@ -2,10 +2,10 @@
 
 <p align="center">
   <a href="https://www.ruby-lang.org/en/">
-    <img src="https://img.shields.io/badge/Ruby-v3.3.2-green.svg" alt="ruby version">
+    <img src="https://img.shields.io/badge/Ruby-v3.3.2-brightgreen.svg" alt="ruby version">
   </a>
   <a href="http://rubyonrails.org/">
-    <img src="https://img.shields.io/badge/Rails-v8.0.3-green.svg" alt="rails version">
+    <img src="https://img.shields.io/badge/Rails-v8.0.3-brightgreen.svg" alt="rails version">
   </a>
 </p>
 
@@ -82,5 +82,5 @@ $ dip guard
 
 ## Documentation
 
-- [Example Doc (English)](path/to/file.md)
+- [Mathematical Explanation (English)](docs/methematical-en.md)
 

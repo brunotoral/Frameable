@@ -1,0 +1,589 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/circles":
+    get:
+      summary: List and filter circles
+      tags:
+      - Circles
+      parameters:
+      - name: center_x
+        in: query
+        required: false
+        description: Center X coordinate for the search radius
+        schema:
+          type: string
+      - name: center_y
+        in: query
+        required: false
+        description: Center Y coordinate for the search radius
+        schema:
+          type: string
+      - name: radius
+        in: query
+        required: false
+        description: Radius for the search area
+        schema:
+          type: string
+      - name: frame_id
+        in: query
+        required: false
+        description: Optional frame ID to filter circles
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    center_y:
+                      type: string
+                      example: '10.0'
+                    center_x:
+                      type: string
+                      example: '20.0'
+                    radius:
+                      type: string
+                      example: '5.0'
+                    frame_id:
+                      type: number
+                      example: 77
+                    updated_at:
+                      type: string
+                      example: '2025-10-22T11:45:02.833Z'
+                    created_at:
+                      type: string
+                      example: '2025-10-22T11:45:02.833Z'
+  "/circles/{id}":
+    put:
+      summary: Update Circle
+      tags:
+      - Circles
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 77
+                  center_y:
+                    type: string
+                    example: '123.4567'
+                  center_x:
+                    type: string
+                    example: '321.8765'
+                  radius:
+                    type: string
+                    example: '77.4589'
+                  updated_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+                  created_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Record Invalid
+                  message:
+                    type: string
+                    example: Radius is not a number
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Record Not Found
+                  message:
+                    type: string
+                    example: Couldn't find Circle with 'id'="123"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                center_y:
+                  type: number
+                  format: double
+                  example: 10.0
+                center_x:
+                  type: number
+                  format: double
+                  example: 30.0
+                radius:
+                  type: number
+                  format: double
+                  example: 14.0
+    delete:
+      summary: Delete Circle
+      tags:
+      - Circles
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+  "/frames/{frame_id}/circles":
+    post:
+      summary: create circle
+      tags:
+      - Create Circle
+      parameters:
+      - name: frame_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '201':
+          description: creted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 77
+                  center_y:
+                    type: string
+                    example: '123.4567'
+                  center_x:
+                    type: string
+                    example: '321.8765'
+                  radius:
+                    type: string
+                    example: '77.4589'
+                  updated_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+                  created_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Record Invalid
+                  message:
+                    type: string
+                    example: Center Y can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                center_y:
+                  type: number
+                  format: double
+                  example: 10.0
+                center_x:
+                  type: number
+                  format: double
+                  example: 30.0
+                radius:
+                  type: number
+                  format: double
+                  example: 22.0
+              required:
+              - center_y
+              - center_x
+              - radius
+  "/frames":
+    get:
+      summary: list frames
+      tags:
+      - List Frames
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 77
+                    center_y:
+                      type: string
+                      example: '123.4567'
+                    center_x:
+                      type: string
+                      example: '321.8765'
+                    width:
+                      type: string
+                      example: '65.0987'
+                    height:
+                      type: string
+                      example: '77.4589'
+                    circles_count:
+                      type: number
+                      example: 3
+                    highest_circle_position:
+                      type: object
+                      properties:
+                        center_x:
+                          type: string
+                          example: '12'
+                        center_y:
+                          type: string
+                          example: '17'
+                      nullable: true
+                    lowest_circle_position:
+                      type: object
+                      properties:
+                        center_x:
+                          type: string
+                          example: '12'
+                        center_y:
+                          type: string
+                          example: '17'
+                      nullable: true
+                    leftmost_circle_position:
+                      type: object
+                      properties:
+                        center_x:
+                          type: string
+                          example: '12'
+                        center_y:
+                          type: string
+                          example: '17'
+                      nullable: true
+                    rightmost_circle_position:
+                      type: object
+                      properties:
+                        center_x:
+                          type: string
+                          example: '12'
+                        center_y:
+                          type: string
+                          example: '17'
+                      nullable: true
+                    updated_at:
+                      type: string
+                      example: '2025-10-22T11:45:02.833Z'
+                    created_at:
+                      type: string
+                      example: '2025-10-22T11:45:02.833Z'
+                  required:
+                  - id
+                  - center_y
+                  - center_x
+                  - width
+                  - height
+    post:
+      summary: create frame
+      tags:
+      - Frame Creation
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 77
+                  center_y:
+                    type: string
+                    example: '123.4567'
+                  center_x:
+                    type: string
+                    example: '321.8765'
+                  width:
+                    type: string
+                    example: '65.0987'
+                  height:
+                    type: string
+                    example: '77.4589'
+                  updated_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+                  created_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+                required:
+                - id
+                - center_y
+                - center_x
+                - width
+                - height
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Record Invalid
+                  message:
+                    type: string
+                    example: Center Y can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                center_y:
+                  type: number
+                  format: double
+                  example: 10.0
+                center_x:
+                  type: number
+                  format: double
+                  example: 30.0
+                width:
+                  type: number
+                  format: double
+                  example: 22.0
+                height:
+                  type: number
+                  format: double
+                  example: 14.0
+              required:
+              - center_y
+              - center_x
+              - width
+              - height
+  "/frames/{id}":
+    get:
+      summary: show frame
+      tags:
+      - Show Frame
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 77
+                  center_y:
+                    type: string
+                    example: '123.4567'
+                  center_x:
+                    type: string
+                    example: '321.8765'
+                  width:
+                    type: string
+                    example: '65.0987'
+                  height:
+                    type: string
+                    example: '77.4589'
+                  circles_count:
+                    type: number
+                    example: 3
+                  highest_circle_position:
+                    type: object
+                    properties:
+                      center_x:
+                        type: string
+                        example: '12'
+                      center_y:
+                        type: string
+                        example: '17'
+                    nullable: true
+                  lowest_circle_position:
+                    type: object
+                    properties:
+                      center_x:
+                        type: string
+                        example: '12'
+                      center_y:
+                        type: string
+                        example: '17'
+                    nullable: true
+                  leftmost_circle_position:
+                    type: object
+                    properties:
+                      center_x:
+                        type: string
+                        example: '12'
+                      center_y:
+                        type: string
+                        example: '17'
+                    nullable: true
+                  rightmost_circle_position:
+                    type: object
+                    properties:
+                      center_x:
+                        type: string
+                        example: '12'
+                      center_y:
+                        type: string
+                        example: '17'
+                    nullable: true
+                  updated_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+                  created_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+                required:
+                - id
+                - center_y
+                - center_x
+                - width
+                - height
+                - highest_circle_position
+                - lowest_circle_position
+                - leftmost_circle_position
+                - rightmost_circle_position
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Record Not Found
+                  message:
+                    type: string
+                    example: Couldn't find Frame with 'id'="123"
+    put:
+      summary: update frame
+      tags:
+      - Update Frame
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 77
+                  center_y:
+                    type: string
+                    example: '123.4567'
+                  center_x:
+                    type: string
+                    example: '321.8765'
+                  width:
+                    type: string
+                    example: '65.0987'
+                  height:
+                    type: string
+                    example: '77.4589'
+                  updated_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+                  created_at:
+                    type: string
+                    example: '2025-10-22T11:45:02.833Z'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                center_y:
+                  type: number
+                  format: double
+                  example: 10.0
+                center_x:
+                  type: number
+                  format: double
+                  example: 30.0
+                width:
+                  type: number
+                  format: double
+                  example: 22.0
+                height:
+                  type: number
+                  format: double
+                  example: 14.0
+    delete:
+      summary: delete frame
+      tags:
+      - Delete Frame
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: No Content
+        '409':
+          description: Conflict
+        '404':
+          description: Not Found
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
