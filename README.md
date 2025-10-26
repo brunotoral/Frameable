@@ -82,6 +82,18 @@ $ dip guard
 
 ## Documentation
 
+You can see the endpoint documentation by running the command:
+
+```sh
+dip rails server
+```
+
+Then accessing the URL address:
+
+```
+`http://localhost:3000/api-docs`
+
 - [Mathematical Explanation (English)](docs/mathematical-en.md)
 - [Endpoints Documentation (English)](docs/endpoints-en.md)
+
 
