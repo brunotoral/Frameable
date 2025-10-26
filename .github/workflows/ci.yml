@@ -8,9 +8,8 @@ on:
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Ruby
@@ -21,9 +20,6 @@ jobs:
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
-
-      - name: Run unit tests
-        run: bundle exec rspec
 
   lint:
     runs-on: ubuntu-latest
@@ -40,3 +36,37 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: rails_test
+          POSTGRES_USER: runner
+          POSTGRES_PASSWORD: ''
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://runner@localhost:5432/rails_test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Prepare test database
+        run: bin/rails db:test:prepare
+
+      - name: Run unit tests
+        run: bundle exec rspec
