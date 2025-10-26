@@ -94,6 +94,7 @@ Then accessing the URL address:
 http://localhost:3000/api-docs
 ```
 
+- [Design Decisions (English)](docs/design-decisions-en.md)
 - [Mathematical Explanation (English)](docs/mathematical-en.md)
 - [Endpoints Documentation (English)](docs/endpoints-en.md)
 
