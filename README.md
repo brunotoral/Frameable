@@ -83,4 +83,5 @@ $ dip guard
 ## Documentation
 
 - [Mathematical Explanation (English)](docs/methematical-en.md)
+- [Endpoints Documentation (English)](docs/endpoints-en.md)
 
